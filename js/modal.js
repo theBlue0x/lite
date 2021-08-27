@@ -1,18 +1,18 @@
-// Get the modal
-var modal = document.getElementById("qrreader");
+const modal = document.querySelector(".modal");
+const trigger = document.querySelector(".trigger");
+const closeButton = document.querySelector(".close-button");
 
-// Get the button that opens the modal
-var btn = document.getElementById("qr");
-
-// Get the element that closes the modal
-var span = document.getElementById("qrclose");
-
-// When the user clicks on the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
+function toggleModal() {
+  modal.classList.toggle("show-modal");
 }
 
-// When the user clicks on close, close the modal
-span.onclick = function() {
-  modal.style.display = "none";
+function windowOnClick(event) {
+ if (event.target === modal) {
+            toggleModal();
+ }
 }
+
+trigger.addEventListener("click", toggleModal);
+closeButton.addEventListener("click", toggleModal);
+window.addEventListener("click", windowOnClick);
+  
