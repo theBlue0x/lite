@@ -112,7 +112,7 @@ function docReady(fn) {
 
             // Optional: To close the QR code scannign after the result is found
             html5QrcodeScanner.clear();
-            setTimeout(function(){ $('#qrreader').modal('hide'); }, 10);   // Close modal after timeout   
+            setTimeout(function(){ $('#qrreader').modal('hide').qrclose('hide'); }, 10);   // Close modal after timeout   
           }
         }
 
@@ -167,18 +167,15 @@ button, .qr {
   width: 24rem;
   border-radius: 0.5rem;
 }
-.close-button {
-  float: right;
-  width: 1.5rem;
-  line-height: 1.5rem;
+.qrclose {
+  width: 2rem;
+  line-height: 2rem;
   text-align: center;
   cursor: pointer;
-  border-radius: 0.25rem;
-  background-color: lightgray;
+  border: 1px;
+
 }
-.close-button:hover {
-  background-color: darkgray;
-}
+
 .show-modal {
   opacity: 1;
   visibility: visible;
@@ -217,6 +214,7 @@ button, .qr {
           <div class="modal" id="qrreader">
             <div class="modal-content">
               <div id="reader"></div>
+              <span class="qrclose">x</span>
             </div> <!-- /.modal-content -->
           </div> <!-- /.modal -->
         </div>
