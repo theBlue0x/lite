@@ -791,13 +791,13 @@ module.exports = function write(target) {
 });
 /*! responsive-nav.js 1.0.39
  * https://github.com/viljamis/responsive-nav.js
- * http://responsive-nav.com
+ * https://responsive-nav.com
  *
  * Copyright (c) 2015 @viljamis
  * Available under the MIT license
  Licensed under the MIT license.
 
-Copyright (c) 2013 Viljami Salminen, http://viljamis.com/
+Copyright (c) 2013 Viljami Salminen, https://viljamis.com/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -842,7 +842,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     /**
      * Add Event
      * fn arg can be an object or a function, thanks to handleEvent
-     * read more at: http://www.thecssninja.com/javascript/handleevent
+     * read more at: https://www.thecssninja.com/javascript/handleevent
      *
      * @param  {element}  element
      * @param  {event}    event
