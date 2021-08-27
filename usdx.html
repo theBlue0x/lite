@@ -100,7 +100,7 @@ function docReady(fn) {
       var lastResult, countResults = 0;
 
       var html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader", { fps: 10, qrbox: 250 });
+        "reader", { fps: 10, qrbox: 500 });
 
       function onScanSuccess(decodedText, decodedResult) {
         if (decodedText !== lastResult) {
