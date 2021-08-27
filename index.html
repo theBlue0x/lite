@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta class="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="description" content="Blue0x Lite Wallet">
+  <link rel="shortcut icon" href="images/favicon.ico">
+
+  <title>Blue0x | LITE</title>
+  
+	<link rel='stylesheet' href='css/style.min.css' />
+
+<script>
+  function login() {
+    // Get the account number
+    var Account = document.getElementById('user_entered_account_number').value;
+    if (!Account) { // Form validation
+      document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p>Account Number Required</p>";
+    } else {
+      // Set the RS account number as a variable
+      var currentRSAccountNumber =$('#user_entered_account_number').val();
+      // POST the request
+      $.post(Constants.nxtpassApiUrl, {
+        requestType: 'accountInfo',
+        account: $('#user_entered_account_number').val()
+      },
+
+      function(result) {
+
+          if (result.query_status == 'empty_account') { // If this is not a valid account number
+            document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p class=\"validation_message\">This is not a valid NXT account.</p>";
+            } else {
+            // Store the new account number and secret phrase in local storage
+            sessionStorage.setItem("numericalAccountNumber", result.accountNumber);
+            sessionStorage.setItem("RSaccountNumber", result.RSaccountNumber);
+            sessionStorage.setItem("accountBalance", result.effectiveBalanceNXT);
+
+            //Store login information in local storage
+            var loginStatus = "loggedin";
+            sessionStorage.setItem("loginStatus", loginStatus);
+
+
+            // Display the logged in account number and balance and remove the Log In button
+            var replace_loginResult = '';
+
+            replace_loginResult += '<div class="container">';
+            replace_loginResult += '<h3>You have logged in with the following account:</h3>';
+            replace_loginResult += '<h4>Account ID</h4>';
+            replace_loginResult += '<p>' + result.RSaccountNumber + '</p>';
+            replace_loginResult += '</div>';
+            replace_loginResult += '<div class="container">';
+            replace_loginResult += '<h4>BLX Balance</h4>';
+            replace_loginResult += '<p>' + result.effectiveBalanceNXT + ' BLX </p>';
+            replace_loginResult += '</div>';
+
+            document.getElementById("loginResult").innerHTML = replace_loginResult;
+          }
+        }, "json"); // Specifies JSON as the expected result
+
+      // Get USDX balance for this account and display it
+      $.post(Constants.nxtpassApiUrl, {
+        requestType: 'callNxt',
+        requestTypeNxt: 'getAccountCurrencies',
+        account: currentRSAccountNumber,
+        currency: Constants.coinoUsdAssetId
+      },
+
+      function(coinoquery) {
+        console.log(coinoquery)
+        if (Object.keys(coinoquery.result).length == 0) {
+            // If this account does not have any USDX
+            console.log('There is no USDX associated with this account.');
+
+            // Display the USDX balance as zero
+            var replace_USDXAccountBalance = '';
+            replace_USDXAccountBalance += '<div class="container">';
+            replace_USDXAccountBalance += '<h4>USDX Balance</h4>';
+            replace_USDXAccountBalance += '<p>0 USDX</p>';
+            replace_USDXAccountBalance += '</div>';
+            replace_USDXAccountBalance += '</br>';
+            replace_USDXAccountBalance += '<a class="button button__primary" href="currency_select.html" role="button">&nbsp;&ensp;Send&nbsp;&ensp;</a>&nbsp;&nbsp;<a class="button button__primary" href="receive.html" role="button">Receive</a>';
+
+            document.getElementById("USDXAccountBalance").innerHTML = replace_USDXAccountBalance;
+          } else {
+            console.log("USDX Balance is " + coinoquery.result.units);
+            var coinoUSDAccountBalance = coinoquery.result.units;
+            sessionStorage.setItem("USDXAccountBalance", coinoquery.result.units);
+
+            // Convert it to decimal notation
+            var convertedCoinoUSDAccountBalance = coinoUSDAccountBalance / 100;
+
+            // Display the USDX balance
+            var replace_USDXAccountBalance = '';
+            replace_USDXAccountBalance += '<div class="container">';
+            replace_USDXAccountBalance += '<h4>USDX Balance</h4>';
+            replace_USDXAccountBalance += '<p>' + convertedCoinoUSDAccountBalance + ' USDX</p>';
+            replace_USDXAccountBalance += '</div>';
+            replace_USDXAccountBalance += '</br>';
+            replace_USDXAccountBalance += '<a class="button button__primary" href="currency_select.html" role="button">&nbsp;&ensp;Send&nbsp;&ensp;</a>&nbsp;&nbsp;<a class="button button__primary" href="receive.html" role="button">Receive</a>';
+
+
+            document.getElementById("USDXAccountBalance").innerHTML = replace_USDXAccountBalance;
+
+          }
+        }, "json"); // Specifies JSON as the expected result
+    }
+  };
+</script>
+
+</head>
+<body>
+	<!-- Authentication pages -->
+	<div class="auth">
+		<div class="container">
+			<div class="auth__inner">
+				<div class="auth__media">
+					<img src="./images/access_account.svg">
+				</div>
+					<div class="auth__auth">
+						<div id="loginResult">
+						<h1 class="auth__title">Access your account</h1>
+						<p>Enter your Blue0x account number below</p>
+						<form>
+							<input name="account" class="fakefield" type="text" id="user_entered_account_number" placeholder="BLX - _______ - _______ - _______ - _______">
+						</form>
+						<div id="user_entered_account_numberErrorMessage"></div>
+						<button class="button button__primary" type="submit" onclick="login();">Log In</button>
+					</div>
+					<div id="USDXAccountBalance"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src='js/app.min.js'></script>
+
+	<!-- js added in -->
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/freemarket_scripts.min.js"></script>
+	<script src="js/constants.js"></script>
+
+</body>
+</html>

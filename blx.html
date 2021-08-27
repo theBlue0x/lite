@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta class="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="description" content="Blue0x Lite Wallet">
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+	<title>Blue0x | LITE</title>
+
+	<link rel='stylesheet' href='css/style.min.css' />
+
+	
+
+  </head>
+  <body>
+  	<!-- Authentication pages -->
+  	<div class="auth">
+  		<div class="container">
+  			<div class="auth__inner">
+  				<div class="auth__media">
+  					<img src="./images/transfer_money.svg">
+  				</div>
+  				<div class="auth__auth">
+  					<div id="loginResult">
+  						<h1 class="auth__title">Send BLX</h1>
+  						<p>Please fill in the following fields</p>
+  						<form>
+  							<input type='text' placeholder="BLX Address of Recipient">
+  							<input type='text' placeholder="Amount of BLX to Send">
+  							<input type='text' placeholder="Your Account Secret Phrase">
+  						</form>
+  						<div id="user_entered_account_numberErrorMessage"></div>
+  						<button class="button button__primary" type="submit" onclick="passUrl();">Send</button>
+  					</div>
+  					<div id="USDXAccountBalance"></div>
+  				</div>
+  			</div>
+  		</div>
+  	</div>
+
+  	<script src='js/app.min.js'></script>
+
+  	<!-- js added in -->
+  	<script src="js/jquery-1.11.1.min.js"></script>
+  	<script src="js/freemarket_scripts.min.js"></script>
+  	<script src="js/constants.js"></script>
+
+  </body>
+  </html>
