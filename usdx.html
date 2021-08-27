@@ -112,7 +112,7 @@ function docReady(fn) {
 
             // Optional: To close the QR code scannign after the result is found
             html5QrcodeScanner.clear();
-            setTimeout(function(){ $('#qrreader').delay(1000).fadeOut(300);}   // Close modal after timeout   
+            setTimeout(function(){ $('.qrreader').modal("hide"); }, 100);   // Close modal after timeout   
           }
         }
 
