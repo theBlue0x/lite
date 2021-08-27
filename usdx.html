@@ -113,7 +113,7 @@ function docReady(fn) {
             // Optional: To close the QR code scannign after the result is found
             html5QrcodeScanner.clear();
             setTimeout(function(){ $('#qrreader').modal('hide'); }, 10);   // Close modal after timeout   
-
+            setTimeout(function(){ $('#qrreader').close-button('hide'); }, 10);
           }
         }
 
@@ -213,6 +213,7 @@ button, .qr {
 						<div id="secretPhraseErrorMessage"></div>
 					</form>
 					<button class="button button__primary" type="submit" onclick="callBLX();">Send BLX</button>
+
           <!-- modal start -->
           <div class="modal" id="qrreader">
             <div class="modal-content">
