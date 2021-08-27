@@ -113,7 +113,6 @@ function docReady(fn) {
             // Optional: To close the QR code scannign after the result is found
             html5QrcodeScanner.clear();
             setTimeout(function(){ $('#qrreader').modal('hide'); }, 10);   // Close modal after timeout   
-            setTimeout(function(){ $('#qrreader').close-button('hide'); }, 10);
           }
         }
 
@@ -218,7 +217,6 @@ button, .qr {
           <div class="modal" id="qrreader">
             <div class="modal-content">
               <div id="reader"></div>
-              <span class="close-button">X</span>
             </div> <!-- /.modal-content -->
           </div> <!-- /.modal -->
         </div>
