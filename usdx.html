@@ -110,8 +110,9 @@ function docReady(fn) {
 
           document.getElementById('destinationAddress').value = decodedText;
 
-            // Optional: To close the QR code scanning after the result is found
+            // Optional: To close the QR code scannign after the result is found
             html5QrcodeScanner.clear();
+            setTimeout(function(){ $('#qrreader').hide; }, 100);   // Close modal after timeout   
           }
         }
 
@@ -171,10 +172,7 @@ button, .qr {
   line-height: 2rem;
   text-align: center;
   cursor: pointer;
-  border: 1px;
-
 }
-
 .show-modal {
   opacity: 1;
   visibility: visible;
