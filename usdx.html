@@ -110,9 +110,8 @@ function docReady(fn) {
 
           document.getElementById('destinationAddress').value = decodedText;
 
-            // Optional: To close the QR code scannign after the result is found
+            // Optional: To close the QR code scanning after the result is found
             html5QrcodeScanner.clear();
-            setTimeout(function(){ $('#qrreader').modal('hide').qrclose('hide'); }, 10);   // Close modal after timeout   
           }
         }
 
