@@ -10,32 +10,30 @@
 
 	<link rel='stylesheet' href='css/style.min.css' />
 
-	<!-- QR Code Box Styling -->
-	<link href="css/html5-qrcode-css.min.css" rel="stylesheet" />
 	<!-- FontAwesome CDN -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" rel="stylesheet" />
 
 	<script>
 
-	function callBLX() {
+		function callBLX() {
     // Check for necessary fields
-    var amountCheck = document.getElementById("amount").value;
     var destinationAddressCheck = document.getElementById("destinationAddress").value;
+    var amountCheck = document.getElementById("amount").value;
     var secretPhraseCheck = document.getElementById("secretPhrase").value;
 
-    if (amountCheck == "") { // If no amount has been entered
-      // Remove other error messages
-      document.getElementById("destinationAddressErrorMessage").innerHTML = "";
-      document.getElementById("secretPhraseErrorMessage").innerHTML = "";
-      // And alert the user that the amount is required
-      document.getElementById("amountErrorMessage").innerHTML = "<p>An amount is required.</p>";
-  	} else if (destinationAddressCheck == "") {
+		if (destinationAddressCheck == "") {
       // If there is no destination address
       // Remove other error messages
       document.getElementById("amountErrorMessage").innerHTML = "";
       document.getElementById("secretPhraseErrorMessage").innerHTML = "";
       // And alert the user that a destination address is required
       document.getElementById("destinationAddressErrorMessage").innerHTML = "<p>An address is required.</p>";
+    } else if (amountCheck == "") { // If no amount has been entered
+      // Remove other error messages
+      document.getElementById("destinationAddressErrorMessage").innerHTML = "";
+      document.getElementById("secretPhraseErrorMessage").innerHTML = "";
+      // And alert the user that the amount is required
+      document.getElementById("amountErrorMessage").innerHTML = "<p>An amount is required.</p>";
   	} else if (secretPhraseCheck == "") {
       // If there is no secret phrase
       // Remove other error messages
@@ -85,20 +83,8 @@
 }
 </script>
 
-<script>
-	function loadAccountInfo() {
-
-    // If not logged in redirect to login
-    if (sessionStorage.getItem("loginStatus") == "notloggedin") {
-
-      // Redirect to login page
-      var fmlang = localStorage.getItem("fmlang");
-      window.location.assign("index.html?setLng=" + fmlang);
-  }
-};
-</script>
-
 <script >
+
 // QR Code Scanning
 function docReady(fn) {
     // see if DOM is already available
@@ -124,9 +110,9 @@ docReady(function() {
 
 			document.getElementById('destinationAddress').value = decodedText;
 
-            // Optional: To close the QR code scannign after the result is found
-            html5QrcodeScanner.clear();
-            setTimeout(function(){ $('#qrreader').modal('hide'); }, 10);   // Close modal after timeout   
+      // Optional: To close the QR code scannign after the result is found
+      html5QrcodeScanner.clear();
+      setTimeout(function(){ $('#qrReader').modal('hide'); }, 10);   // Close modal after timeout   
 
         }
     }
@@ -145,20 +131,29 @@ docReady(function() {
 </script>
 
 <style>
-	@media (max-device-height: 700px) {
-		.auth {
-			padding-top: 50px;
-		}
+@media (max-device-height: 700px) {
+	.auth {
+		padding-top: 50px;
 	}
-
-	input[type=text] {
-		display: inline-block;
-	}
-
-	button, .qr {
-    color: #6495ed;
-    border-color: #6495ed;
 }
+
+input[type=text] {
+	display: inline-block;
+}
+
+button, .qr {
+	color: #6495ed;
+	border-color: #6495ed;
+}
+
+.modal {
+  display: none; 
+  position: absolute; 
+  z-index: 1; 
+  background-color: #ffffff; /* Fallback color */
+  background-color: #ffffff; /* Black w/ opacity */
+}
+
 </style>
 
 </head>
@@ -171,19 +166,36 @@ docReady(function() {
 					<img src="./images/transfer_money.svg">
 				</div>
 				<div class="auth__auth">
-					<div id="loginResult">
 						<h1 class="auth__title">Send USDX</h1>
 						<p>Please fill in the following fields</p>
 						<form>
-							<button class="qr" data-toggle="modal" data-target="#qrreader">
-							<i class="fa fa-qrcode">&nbsp;Scan QR</i>
+							<button class="qr" id="qrModal" data-toggle="modal" data-target="#qrReader">
+								<i class="fa fa-qrcode">&nbsp;Scan QR</i>
 							</button>
 							<input id="destinationAddress" type="text" placeholder="BLX Address of Recipient">
+							<div id="destinationAddressErrorMessage"></div>
+
+							<div class="modal" id="qrReader">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-body">
+											<div id="reader"></div>
+										</div>
+										</br>
+										<div class="modal-footer">
+											<button type="button" id="qrClose" class="button button__primary">Close</button>
+										</div>
+									</div> <!-- /.modal-content -->
+								</div> <!-- /.modal-dialog -->
+							</div> <!-- /.modal -->
+
 							<input id="amount" type="text" placeholder="Amount of BLX to Send">
+							<div id="amountErrorMessage"></div>
 							<input id="secretPhrase" type="text" placeholder="Your Account Secret Phrase">
+						  <div id="secretPhraseErrorMessage"></div>
 						</form>
 						<div id="user_entered_account_numberErrorMessage"></div>
-						<button class="button button__primary" type="submit" onclick="passUrl();">Send BLX</button>
+						<button class="button button__primary" type="submit" onclick="callBLX();">Send BLX</button>
 					</div>
 				</div>
 			</div>
@@ -193,9 +205,10 @@ docReady(function() {
 	<script src='js/app.min.js'></script>
 
 	<!-- js added in -->
+	<script src="js/html5-qrcode.min.js"></script>
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/freemarket_scripts.min.js"></script>
-	<script src="js/constants.js"></script>
-
+	<script src="js/constants.js"></script>	
+  <script src="js/modal.js"></script>
 </body>
 </html>
