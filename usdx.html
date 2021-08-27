@@ -150,7 +150,6 @@ button, .qr {
 	display: none;
 	background-color: #ffffff;
 	position: relative;
-	z-index: 1;
 }
 
 </style>
@@ -168,7 +167,7 @@ button, .qr {
 					<h1 class="auth__title">Send USDX</h1>
 					<p>Please fill in the following fields</p>
 					<form>
-						<button type="button" id="qr" data-toggle="modal" data-target="#qrreader">
+						<button type="button" id="qr" data-target="#qrreader">
 							<i class="fa fa-qrcode">&nbsp;Scan QR</i>
 						</button>
 
@@ -180,7 +179,7 @@ button, .qr {
 										<div id="reader"></div>
 									</div>
 									</br>
-										<button type="button" id="qrclose" class="button button__primary" data-dismiss="modal">Close</button>
+										<button type="button" id="qrclose" class="button button__primary">Close</button>
 								</div> <!-- /.modal-content -->
 							</div> <!-- /.modal-dialog -->
 						</div> <!-- /.modal -->
