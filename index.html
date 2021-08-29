@@ -44,6 +44,7 @@
             var replace_loginResult = '';
 
             replace_loginResult += '<div class="container">';
+            replace_loginResult += '<h3>You have logged in with the following account:</h3>';
             replace_loginResult += '</br>';
             replace_loginResult += '<h4>Account ID</h4>';
             replace_loginResult += '<p>' + result.RSaccountNumber + '</p>';
@@ -108,6 +109,12 @@
 </script>
 
 <style>
+@media (max-device-width: 994px) {
+  h3 {
+   display: none;
+  }
+}
+
   h4 {
     font-size: 1em;
     color: cornflowerblue;
@@ -119,6 +126,8 @@
     margin-bottom: 1.3em;
     font-size: 14px;
   }
+
+
 </style>
 
 </head>
