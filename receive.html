@@ -1,1 +1,67 @@
-receive.html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta class="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="description" content="Blue0x Lite Wallet">
+	<link rel="shortcut icon" href="images/favicon.ico">
+
+	<title>Blue0x | LITE</title>
+
+	<link rel='stylesheet' href='css/style.min.css' />
+
+<script>
+
+	function displayAccountInfo() {
+    //Get the account numbers
+    var currentRSAccountNumber = sessionStorage.getItem("RSaccountNumber");
+    document.getElementById("text").innerHTML = currentRSAccountNumber;
+    };
+</script>
+
+<script>
+	function createQR() {
+		new QRCode(document.getElementById("qrcode"), {
+			text: sessionStorage.getItem("RSaccountNumber")
+		})
+	};
+</script>
+
+<style>
+.qrcode {
+	display: inline-block;
+}
+
+p {
+color: cornflowerblue;
+}
+</style>
+
+</head>
+<body onload="createQR(); displayAccountInfo();">
+	<!-- Authentication pages -->
+	<div class="auth">
+		<div class="container">
+			<div class="auth__inner">
+				<div class="auth__media">
+					<img src="./images/scan.svg">
+				</div>
+				<div class="auth__auth">
+					<h1 class="auth__title"></h1>
+					<h3>Share your address QR code</h3>
+					<p id="text"></p>
+					<div id="qrcode" class="qrcode"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src='js/app.min.js'></script>
+
+	<!-- js added in -->
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/qrcode.min.js" defer></script>
+
+
+</body>
+</html>
