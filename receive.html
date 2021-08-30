@@ -6,37 +6,113 @@
 	<meta name="description" content="Blue0x Lite Wallet">
 	<link rel="shortcut icon" href="images/favicon.ico">
 
-	<!-- Twitter Cards Meta Tags -->
-	<meta name="twitter:card" content="summary">
-	<meta name="twitter:title" content="My Blue0x Address">
-	<meta name="twitter:image" content="#">
-
 	<title>Blue0x | LITE</title>
 
 	<link rel='stylesheet' href='css/style.min.css' />
 
 <script>
-
 	function displayAccountInfo() {
-    //Get the account numbers
-    var currentRSAccountNumber = sessionStorage.getItem("RSaccountNumber");
-    document.getElementById("text").innerHTML = currentRSAccountNumber;
+    	//Get the account numbers
+    	var currentRSAccountNumber = sessionStorage.getItem("RSaccountNumber");
+    	document.getElementById("text").innerHTML = currentRSAccountNumber;
     };
 </script>
 
 <script>
 	function createQR() {
 		new QRCode(document.getElementById("qrcode"), {
-			text: sessionStorage.getItem("RSaccountNumber")
+		text: sessionStorage.getItem("RSaccountNumber")
 		})
 	};
 </script>
 
 <script>
-	function getURL() {
-		var canvas = document.getElementById('qrcode').querySelector('canvas');
-		var dataURL = canvas.toDataURL();
-		document.querySelector('meta[name="twitter:image"]').setAttribute("content", dataURL);	};
+function goBack() {
+  window.history.back();
+}
+</script>
+
+<script>
+  function showAccountInfo() {
+    // Get the account number
+    var Account = sessionStorage.getItem("RSaccountNumber");
+
+      $.post(Constants.nxtpassApiUrl, {
+        requestType: 'accountInfo',
+        account: Account
+      },
+
+      function(result) {
+
+          if (result.query_status == 'empty_account') { // If this is not a valid account number
+            document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p class=\"validation_message\">This is not a valid NXT account.</p>";
+            } else {
+            // Store the new account number in local storage
+            sessionStorage.setItem("accountBalance", result.effectiveBalanceNXT);
+
+
+            // Display the logged in account number and balance and remove the Log In button
+            var replace_loginResult = '';
+
+            replace_loginResult += '<div class="container">';
+            replace_loginResult += '<h4>Account ID</h4>';
+            replace_loginResult += '<p>' + result.RSaccountNumber + '</p>';
+            replace_loginResult += '</div>';
+            replace_loginResult += '<div class="container">';
+            replace_loginResult += '<h4>BLX Balance</h4>';
+            replace_loginResult += '<p>' + result.effectiveBalanceNXT + ' BLX </p>';
+            replace_loginResult += '</div>';
+
+            document.getElementById("loginResult").innerHTML = replace_loginResult;
+          }
+        }, "json"); // Specifies JSON as the expected result
+
+      // Get USDX balance for this account and display it
+
+      $.post(Constants.nxtpassApiUrl, {
+        requestType: 'callNxt',
+        requestTypeNxt: 'getAccountCurrencies',
+        account: Account,
+        currency: Constants.coinoUsdAssetId
+      },
+
+      function(coinoquery) {
+        console.log(coinoquery)
+        if (Object.keys(coinoquery.result).length == 0) {
+            // If this account does not have any USDX
+            console.log('There is no USDX associated with this account.');
+
+            // Display the USDX balance as zero
+            var replace_USDXAccountBalance = '';
+            replace_USDXAccountBalance += '<div class="container">';
+            replace_USDXAccountBalance += '<h4>USDX Balance</h4>';
+            replace_USDXAccountBalance += '<p>0 USDX</p>';
+            replace_USDXAccountBalance += '</div>';
+            replace_USDXAccountBalance += '<a class="button button__primary" href="receive.html">Go Back</a>';
+
+            document.getElementById("USDXAccountBalance").innerHTML = replace_USDXAccountBalance;
+          } else {
+            console.log("USDX Balance is " + coinoquery.result.units);
+            var coinoUSDAccountBalance = coinoquery.result.units;
+            sessionStorage.setItem("USDXAccountBalance", coinoquery.result.units);
+
+            // Convert it to decimal notation
+            var convertedCoinoUSDAccountBalance = coinoUSDAccountBalance / 100;
+
+            // Display the USDX balance
+            var replace_USDXAccountBalance = '';
+            replace_USDXAccountBalance += '<div class="container">';
+            replace_USDXAccountBalance += '<h4>USDX Balance</h4>';
+            replace_USDXAccountBalance += '<p>' + convertedCoinoUSDAccountBalance + ' USDX</p>';
+            replace_USDXAccountBalance += '</div>';
+            replace_USDXAccountBalance += '<a class="button button__primary" href="receive.html">Go Back</a>';
+
+
+            document.getElementById("USDXAccountBalance").innerHTML = replace_USDXAccountBalance;
+
+          }
+        }, "json"); // Specifies JSON as the expected result
+  };
 </script>
 
 <style>
@@ -44,13 +120,15 @@
 	display: inline-block;
 }
 
-p {
-	color: cornflowerblue;
-}
+h4 {
+    font-size: 1em;
+    color: cornflowerblue;
+    line-height: .5em;
+  }
 </style>
 
 </head>
-<body onload="createQR(); displayAccountInfo(); getURL();">
+<body onload="createQR(); displayAccountInfo();">
 	<!-- Authentication pages -->
 	<div class="auth">
 		<div class="container">
@@ -59,13 +137,16 @@ p {
 					<img src="./images/scan.svg">
 				</div>
 				<div class="auth__auth">
-					<h1 class="auth__title"></h1>
+					<div id="loginResult">
 					<h3>Share your address QR code</h3>
-					<p id="text"></p>
+					<h4 id="text"></h4>
+					</br>
 					<div id="qrcode" class="qrcode"></div>
 					</br>
 					</br>
+					<button class="button button__primary" type="submit" onclick="showAccountInfo();">View Balances</button>
 				</div>
+				<div id="USDXAccountBalance"></div>
 			</div>
 		</div>
 	</div>
@@ -75,6 +156,8 @@ p {
 	<!-- js added in -->
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/qrcode.min.js" defer></script>
+	<script src="js/constants.js"></script>
+	<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 </body>
