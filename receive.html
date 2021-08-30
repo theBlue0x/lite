@@ -6,6 +6,12 @@
 	<meta name="description" content="Blue0x Lite Wallet">
 	<link rel="shortcut icon" href="images/favicon.ico">
 
+	<!--Twitter Card Meta -->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:creator" content="@Blue0x_com" />
+	<meta property="og:title" content="My Blue0x Address" />
+	<meta property="og:image" content="" />
+
 	<title>Blue0x | LITE</title>
 
 	<link rel='stylesheet' href='css/style.min.css' />
@@ -13,9 +19,9 @@
 <script>
 
 	function displayAccountInfo() {
-    //Get the account numbers
-    var currentRSAccountNumber = sessionStorage.getItem("RSaccountNumber");
-    document.getElementById("text").innerHTML = currentRSAccountNumber;
+    	//Get the account numbers
+    	var currentRSAccountNumber = sessionStorage.getItem("RSaccountNumber");
+    	document.getElementById("text").innerHTML = currentRSAccountNumber;
     };
 </script>
 
@@ -24,6 +30,16 @@
 		new QRCode(document.getElementById("qrcode"), {
 			text: sessionStorage.getItem("RSaccountNumber")
 		})
+	};
+	
+</script>
+
+<script>
+	function getURL() {
+		var canvas = document.getElementById('qrcode').querySelector('canvas');
+		var dataURL = canvas.toDataURL();
+		$("#tweet").attr("data-a2a-url", dataURL);
+
 	};
 </script>
 
@@ -38,7 +54,7 @@ p {
 </style>
 
 </head>
-<body onload="createQR(); displayAccountInfo();">
+<body onload="createQR(); displayAccountInfo(); getURL();">
 	<!-- Authentication pages -->
 	<div class="auth">
 		<div class="container">
@@ -51,16 +67,28 @@ p {
 					<h3>Share your address QR code</h3>
 					<p id="text"></p>
 					<div id="qrcode" class="qrcode"></div>
-				</div>
+					<div id="result"></div>
+
+				</br>
+			</br>
+			<!-- AddToAny BEGIN -->
+			<div class="a2a_kit a2a_kit_size_32 a2a_default_style" id="tweet" style="display: inline-block;" data-a2a-url="" data-a2a-title="My Blue0x Address">
+				<a class="a2a_button_facebook"></a>
+				<a class="a2a_button_twitter"></a>
+				<a class="a2a_button_print"></a>
 			</div>
+			<!-- AddToAny END -->
 		</div>
 	</div>
+</div>
+</div>
 
-	<script src='js/app.min.js'></script>
+<script src='js/app.min.js'></script>
 
-	<!-- js added in -->
-	<script src="js/jquery-1.11.1.min.js"></script>
-	<script src="js/qrcode.min.js" defer></script>
+<!-- js added in -->
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/qrcode.min.js"></script>
+<script async src="https://static.addtoany.com/menu/page.js"></script>
 
 
 </body>
