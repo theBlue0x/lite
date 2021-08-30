@@ -54,7 +54,8 @@ function goBack() {
             // Display the logged in account number and balance and remove the Log In button
             var replace_loginResult = '';
 
-            replace_loginResult += '<div class="container">';
+            replace_loginResult += '<div class="auth_auth">';
+            replace_loginResult += '<h3>Your Account Balances:</h3>';
             replace_loginResult += '<h4>Account ID</h4>';
             replace_loginResult += '<p>' + result.RSaccountNumber + '</p>';
             replace_loginResult += '</div>';
@@ -118,19 +119,17 @@ function goBack() {
 <style>
 @media (max-device-width: 767px) {
   h3 {
-	font-size: 1.3em;
+	  font-size: 1.3em;
 	  }
 }
-
 .qrcode {
 	display: inline-block;
 }
-
 h4 {
-    font-size: 1em;
-    color: cornflowerblue;
-    line-height: .5em;
-  }
+  font-size: 1em;
+  color: cornflowerblue;
+  line-height: .5em;
+}
 </style>
 
 </head>
