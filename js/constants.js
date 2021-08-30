@@ -2,16 +2,14 @@ var Constants = (function(Constants, $, undefined) {
 
   Constants.isTestnet = false;
 
-  var mainnetCoinoUsdAssetId = '9756711664096254982';
-  var testnetCoinoUsdAssetId = '9429933812817993614';
-  Constants.USDXAssetId = mainnetCoinoUsdAssetId;
+  var mainnetUSDXId = '9756711664096254982';
+  var testnetUSDXId = '9429933812817993614';
+  Constants.USDXId = mainnetUSDXId;
 
   if(Constants.isTestnet)
   {
-    Constants.coinoUsdAssetId = testnetCoinoUsdAssetId;
+    Constants.USDXId = testnetUSDXAssetId;
   }
-
-  Constants.coinoUsdAssetName = "a:" + Constants.coinoUsdAssetId;
 
   Constants.nxtpassApiUrl = 'https://marketapi.blue0x.com/nxtpass';
 

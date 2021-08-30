@@ -28,7 +28,7 @@
       function(result) {
 
           if (result.query_status == 'empty_account') { // If this is not a valid account number
-            document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p class=\"validation_message\">This is not a valid NXT account.</p>";
+            document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p>This is not a valid BLX account.</p>";
             } else {
             // Store the new account number and secret phrase in local storage
             sessionStorage.setItem("numericalAccountNumber", result.accountNumber);
@@ -63,7 +63,7 @@
         requestType: 'callNxt',
         requestTypeNxt: 'getAccountCurrencies',
         account: currentRSAccountNumber,
-        currency: Constants.coinoUsdAssetId
+        currency: Constants.USDXId
       },
 
       function(coinoquery) {
@@ -84,17 +84,17 @@
             document.getElementById("USDXAccountBalance").innerHTML = replace_USDXAccountBalance;
           } else {
             console.log("USDX Balance is " + coinoquery.result.units);
-            var coinoUSDAccountBalance = coinoquery.result.units;
+            var USDXAccountBalance = coinoquery.result.units;
             sessionStorage.setItem("USDXAccountBalance", coinoquery.result.units);
 
             // Convert it to decimal notation
-            var convertedCoinoUSDAccountBalance = coinoUSDAccountBalance / 100;
+            var convertedUSDXAccountBalance = USDXAccountBalance / 100;
 
             // Display the USDX balance
             var replace_USDXAccountBalance = '';
             replace_USDXAccountBalance += '<div class="container">';
             replace_USDXAccountBalance += '<h4>USDX Balance</h4>';
-            replace_USDXAccountBalance += '<p>' + convertedCoinoUSDAccountBalance + ' USDX</p>';
+            replace_USDXAccountBalance += '<p>' + convertedUSDXAccountBalance + ' USDX</p>';
             replace_USDXAccountBalance += '</div>';
             replace_USDXAccountBalance += '</br>';
             replace_USDXAccountBalance += '<a class="button button__primary" href="currency_select.html" role="button">&nbsp;&ensp;Send&nbsp;&ensp;</a>&nbsp;&nbsp;<a class="button button__primary" href="receive.html" role="button">Receive</a>';
