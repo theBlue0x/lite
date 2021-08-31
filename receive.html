@@ -47,15 +47,16 @@ function goBack() {
           if (result.query_status == 'empty_account') { // If this is not a valid account number
             document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p>This is not a valid BLX account.</p>";
             } else {
-            // Store the new account number in local storage
+            // Store the new account balance
             sessionStorage.setItem("accountBalance", result.effectiveBalanceNXT);
+            console.log('BLX Balance is ' + result.effectiveBalanceNXT)
 
 
             // Display the logged in account number and balance and remove the Log In button
             var replace_loginResult = '';
 
-            replace_loginResult += '<div class="auth_auth">';
-            replace_loginResult += '<h3>Your Account Balances:</h3>';
+            replace_loginResult += '<div class="container">';
+            replace_loginResult += '<h3>Your current account balances</h3>';
             replace_loginResult += '<h4>Account ID</h4>';
             replace_loginResult += '<p>' + result.RSaccountNumber + '</p>';
             replace_loginResult += '</div>';
@@ -74,7 +75,7 @@ function goBack() {
         requestType: 'callNxt',
         requestTypeNxt: 'getAccountCurrencies',
         account: Account,
-        currency: Constants.coinoUsdAssetId
+        currency: Constants.USDXId
       },
 
       function(coinoquery) {
@@ -94,17 +95,17 @@ function goBack() {
             document.getElementById("USDXAccountBalance").innerHTML = replace_USDXAccountBalance;
           } else {
             console.log("USDX Balance is " + coinoquery.result.units);
-            var coinoUSDAccountBalance = coinoquery.result.units;
+            var USDXAccountBalance = coinoquery.result.units;
             sessionStorage.setItem("USDXAccountBalance", coinoquery.result.units);
 
             // Convert it to decimal notation
-            var convertedCoinoUSDAccountBalance = coinoUSDAccountBalance / 100;
+            var convertedUSDXAccountBalance = USDXAccountBalance / 100;
 
             // Display the USDX balance
             var replace_USDXAccountBalance = '';
             replace_USDXAccountBalance += '<div class="container">';
             replace_USDXAccountBalance += '<h4>USDX Balance</h4>';
-            replace_USDXAccountBalance += '<p>' + convertedCoinoUSDAccountBalance + ' USDX</p>';
+            replace_USDXAccountBalance += '<p>' + convertedUSDXAccountBalance + ' USDX</p>';
             replace_USDXAccountBalance += '</div>';
             replace_USDXAccountBalance += '<a class="button button__primary" href="receive.html">Go Back</a>';
 
@@ -117,10 +118,10 @@ function goBack() {
 </script>
 
 <style>
-@media (max-device-width: 767px) {
+@media (max-device-width: 994px) {
   h3 {
-	  font-size: 1.3em;
-	  }
+   display: none;
+  }
 }
 .qrcode {
 	display: inline-block;
@@ -143,7 +144,7 @@ h4 {
 				</div>
 				<div class="auth__auth">
 					<div id="loginResult">
-					<h3>Share your address QR code</h3>
+					<h1 class="auth__title">Your address QR code</h1>
 					<h4 id="text"></h4>
 					</br>
 					<div id="qrcode" class="qrcode"></div>

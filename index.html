@@ -30,21 +30,16 @@
           if (result.query_status == 'empty_account') { // If this is not a valid account number
             document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p>This is not a valid BLX account.</p>";
             } else {
-            // Store the new account number and secret phrase in local storage
-            sessionStorage.setItem("numericalAccountNumber", result.accountNumber);
+            // Store the account number and balance
             sessionStorage.setItem("RSaccountNumber", result.RSaccountNumber);
             sessionStorage.setItem("accountBalance", result.effectiveBalanceNXT);
+             console.log('BLX Balance is ' + result.effectiveBalanceNXT)
 
-            //Store login information in local storage
-            var loginStatus = "loggedin";
-            sessionStorage.setItem("loginStatus", loginStatus);
-
-
-            // Display the logged in account number and balance and remove the Log In button
+            // Display the logged in account number and balance
             var replace_loginResult = '';
 
             replace_loginResult += '<div class="container">';
-            replace_loginResult += '<h3>You have logged in with the following account</h3>';
+            replace_loginResult += '<h3>You are logged in with the following account</h3>';
             replace_loginResult += '</br>';
             replace_loginResult += '<h4>Account ID</h4>';
             replace_loginResult += '<p>' + result.RSaccountNumber + '</p>';
