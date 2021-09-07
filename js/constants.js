@@ -11,7 +11,7 @@ var Constants = (function(Constants, $, undefined) {
     Constants.USDXId = testnetUSDXAssetId;
   }
 
-  Constants.nxtpassApiUrl = 'https://marketapi.blue0x.com/nxtpass';
+  Constants.nxtpassApiUrl = 'http://127.0.0.1:17776/nxtpass';
 
   // 2 weeks default listing duration
   Constants.listingDurationDefault = 2 * 7 * 24 * 60 * 60;

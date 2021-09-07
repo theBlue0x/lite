@@ -41,11 +41,9 @@
       document.getElementById("destinationAddressErrorMessage").innerHTML = "";
       // And alert the user that a value to convert is required
       document.getElementById("secretPhraseErrorMessage").innerHTML = "<p>Your secret phrase is required.</p>";
-    } else {
-      // All the required fields are here, so execute
-      // The amount to send, converted into NxtQuant
+    } else {  
       var recipient = document.getElementById("destinationAddress").value;
-      var amount = document.getElementById("amount").value * 100;
+      var amount = document.getElementById("amount").value;
       var secretPhrase = document.getElementById("secretPhrase").value;
 
       // Disable the button while conversion is under way and display Processing... text
@@ -57,7 +55,7 @@
       	requestTypeNxt: 'transferCurrency',        
       	recipient: recipient,
         currency: Constants.USDXId,
-      	amountNQT: amount,
+      	units: amount,
       	secretPhrase: secretPhrase,
       	feeNQT: 100000000,
       	deadline: 60,
@@ -213,7 +211,7 @@ button, .qr {
 						<div id="destinationAddressErrorMessage"></div>
 						<input id="amount" type="text" placeholder="Amount of USDX to Send">
 						<div id="amountErrorMessage"></div>
-						<input id="secretPhrase" type="text" placeholder="Your Account Secret Phrase">
+						<input id="secretPhrase" type="password" placeholder="Your Account Secret Phrase">
 						<div id="secretPhraseErrorMessage"></div>
 					</form>
 					<div id="callBLXButtonSection">
