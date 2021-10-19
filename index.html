@@ -5,69 +5,47 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<meta name="description" content="Blue0x Lite Wallet">
   <link rel="shortcut icon" href="images/favicon.ico">
-
   <title>Blue0x | LITE</title>
-  
 	<link rel='stylesheet' href='css/style.min.css' />
-
 <script>
   function login() {
-    // Get the account number
     var Account = document.getElementById('user_entered_account_number').value;
-    if (!Account) { // Form validation
+    if (!Account) { 
       document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p>Account Number Required</p>";
     } else {
-      // Set the RS account number as a variable
       var currentRSAccountNumber =$('#user_entered_account_number').val();
-      // POST the request
-      $.post(Constants.nxtpassApiUrl, {
-        requestType: 'accountInfo',
-        account: $('#user_entered_account_number').val()
+      $.post(Constants.apiUrl, {
+        requestType: 'getAccount',
+        account: $('#user_entered_account_number').val(),
+        includeEffectiveBalance: "true"
       },
-
       function(result) {
-
-          if (result.query_status == 'empty_account') { // If this is not a valid account number
-            document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p>This is not a valid BLX account.</p>";
+          if (result.errorDescription == 'Unknown account') { // If this is not a valid account number
+            document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p class=\"validation_message\">New or invalid BLX account.  New BLX accounts must first make an outgoing transaction from the Blue0x wallet.</p>";
             } else {
-            // Store the account number and balance
-            sessionStorage.setItem("RSaccountNumber", result.RSaccountNumber);
-            sessionStorage.setItem("accountBalance", result.effectiveBalanceNXT);
-             console.log('BLX Balance is ' + result.effectiveBalanceNXT)
-
-            // Display the logged in account number and balance
+            var balance = result.balanceNQT / 100000000;
+            sessionStorage.setItem("accountRS", result.accountRS);
+            sessionStorage.setItem("accountBalance", balance);
             var replace_loginResult = '';
-
             replace_loginResult += '<div class="auth_auth">';
             replace_loginResult += '<h3>You are logged in with the following account</h3>';
             replace_loginResult += '</br>';
             replace_loginResult += '<h4>Account ID</h4>';
-            replace_loginResult += '<p>' + result.RSaccountNumber + '</p>';
+            replace_loginResult += '<p>' + result.accountRS + '</p>';
             replace_loginResult += '</div>';
             replace_loginResult += '<div class="container">';
             replace_loginResult += '<h4>BLX Balance</h4>';
-            replace_loginResult += '<p>' + result.effectiveBalanceNXT + ' BLX </p>';
+            replace_loginResult += '<p>' + balance + ' BLX </p>';
             replace_loginResult += '</div>';
-
             document.getElementById("loginResult").innerHTML = replace_loginResult;
-          }
-        }, "json"); // Specifies JSON as the expected result
-
-      // Get USDX balance for this account and display it
-      $.post(Constants.nxtpassApiUrl, {
-        requestType: 'callNxt',
-        requestTypeNxt: 'getAccountCurrencies',
+          }}, "json");
+      $.post(Constants.apiUrl, {
+        requestType: 'getAccountCurrencies',
         account: currentRSAccountNumber,
         currency: Constants.USDXId
       },
-
       function(coinoquery) {
-        console.log(coinoquery)
-        if (Object.keys(coinoquery.result).length == 0) {
-            // If this account does not have any USDX
-            console.log('There is no USDX associated with this account.');
-
-            // Display the USDX balance as zero
+        if (coinoquery.length == 0) {
             var replace_USDXAccountBalance = '';
             replace_USDXAccountBalance += '<div class="container">';
             replace_USDXAccountBalance += '<h4>USDX Balance</h4>';
@@ -75,17 +53,11 @@
             replace_USDXAccountBalance += '</div>';
             replace_USDXAccountBalance += '</br>';
             replace_USDXAccountBalance += '<a class="button button__primary" href="currency_select.html" role="button">&nbsp;&ensp;Send&nbsp;&ensp;</a>&nbsp;&nbsp;<a class="button button__primary" href="receive.html" role="button">Receive</a>';
-
             document.getElementById("USDXAccountBalance").innerHTML = replace_USDXAccountBalance;
           } else {
-            console.log("USDX Balance is " + coinoquery.result.units);
-            var USDXAccountBalance = coinoquery.result.units;
-            sessionStorage.setItem("USDXAccountBalance", coinoquery.result.units);
-
-            // Convert it to decimal notation
+            var USDXAccountBalance = coinoquery.units;
+            sessionStorage.setItem("USDXAccountBalance", coinoquery.units);
             var convertedUSDXAccountBalance = USDXAccountBalance / 100;
-
-            // Display the USDX balance
             var replace_USDXAccountBalance = '';
             replace_USDXAccountBalance += '<div class="container">';
             replace_USDXAccountBalance += '<h4>USDX Balance</h4>';
@@ -93,22 +65,16 @@
             replace_USDXAccountBalance += '</div>';
             replace_USDXAccountBalance += '</br>';
             replace_USDXAccountBalance += '<a class="button button__primary" href="currency_select.html" role="button">&nbsp;&ensp;Send&nbsp;&ensp;</a>&nbsp;&nbsp;<a class="button button__primary" href="receive.html" role="button">Receive</a>';
-
-
             document.getElementById("USDXAccountBalance").innerHTML = replace_USDXAccountBalance;
-
           }
-        }, "json"); // Specifies JSON as the expected result
-    }
-  };
+        }, "json");
+    }};
 </script>
-
 <style>
 @media (max-device-width: 994px) {
   h3 {
    display: none;
-  }
-}
+  }}
 h3 {
     margin-bottom: -5px;
 }
@@ -119,10 +85,8 @@ h4 {
   line-height: .5em;
 }
 </style>
-
 </head>
 <body>
-	<!-- Authentication pages -->
 	<div class="auth">
 		<div class="container">
 			<div class="auth__inner">
@@ -144,13 +108,9 @@ h4 {
 			</div>
 		</div>
 	</div>
-
 	<script src='js/app.min.js'></script>
-
-	<!-- js added in -->
-	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/jquery.min.js"></script>
 	<script src="js/freemarket_scripts.min.js"></script>
 	<script src="js/constants.js"></script>
-
 </body>
 </html>

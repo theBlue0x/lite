@@ -5,77 +5,46 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<meta name="description" content="Blue0x Lite Wallet">
 	<link rel="shortcut icon" href="images/favicon.ico">
-
 	<title>Blue0x | LITE</title>
-
 	<link rel='stylesheet' href='css/style.min.css' />
-
-	<!-- FontAwesome CDN -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" rel="stylesheet" />
-
 	<script>
-
 		function callBLX() {
-    // Check for necessary fields
     var destinationAddressCheck = document.getElementById("destinationAddress").value;
     var amountCheck = document.getElementById("amount").value;
     var secretPhraseCheck = document.getElementById("secretPhrase").value;
-
     if (destinationAddressCheck == "") {
-      // If there is no destination address
-      // Remove other error messages
       document.getElementById("amountErrorMessage").innerHTML = "";
       document.getElementById("secretPhraseErrorMessage").innerHTML = "";
-      // And alert the user that a destination address is required
       document.getElementById("destinationAddressErrorMessage").innerHTML = "<p>An address is required.</p>";
-    } else if (amountCheck == "") { // If no amount has been entered
-      // Remove other error messages
+    } else if (amountCheck == "") { 
       document.getElementById("destinationAddressErrorMessage").innerHTML = "";
       document.getElementById("secretPhraseErrorMessage").innerHTML = "";
-      // And alert the user that the amount is required
       document.getElementById("amountErrorMessage").innerHTML = "<p>An amount is required.</p>";
     } else if (secretPhraseCheck == "") {
-      // If there is no secret phrase
-      // Remove other error messages
       document.getElementById("amountErrorMessage").innerHTML = "";
       document.getElementById("destinationAddressErrorMessage").innerHTML = "";
-      // And alert the user that a value to convert is required
       document.getElementById("secretPhraseErrorMessage").innerHTML = "<p>Your secret phrase is required.</p>";
     } else {
-      // All the required fields are here, so execute
-      // The amount to send, converted into NxtQuant
       var recipient = document.getElementById("destinationAddress").value;
       var amount = document.getElementById("amount").value * 100000000;
       var secretPhrase = document.getElementById("secretPhrase").value;
-
-      // Disable the button while conversion is under way and display Processing... text
       document.getElementById("callBLXButtonSection").innerHTML = "<button class=\"button button__primary\"><i class=\"fa fa-refresh fa-spin\">&nbsp;Processing</i></button>";
-
-
-      $.post(Constants.nxtpassApiUrl, {
-      	requestType: 'callNxt',
-      	requestTypeNxt: 'sendMoney',        
+      $.post(Constants.apiUrl, {
+      	requestType: 'sendMoney',        
       	recipient: recipient,
       	amountNQT: amount,
       	secretPhrase: secretPhrase,
       	feeNQT: 100000000,
-      	deadline: 60,
+      	deadline: 60
       },
-
       function(response) {
       	console.log(response);
-
       	var transactionNumber = response['result'].transaction;
-
-          // Clear the fields
           document.getElementById("amount").value = "";
           document.getElementById("destinationAddress").value = "";
           document.getElementById("secretPhrase").value = "";
-
-          // Replace the Processing... button with a working button again
           document.getElementById("callBLXButtonSection").innerHTML = "<div id=\"callBLXButtonSection\"><button type=\"button\" id=\"callBLXButton\" class=\"button button__primary\" onclick=\"callBLX();\">Send</button></div>";
-
-            // Display the transaction number full-page
             var replace_sendBLXResult = '';
             replace_sendBLXResult += '<div class="container">';
             replace_sendBLXResult += '</br>';
@@ -83,77 +52,45 @@
             replace_sendBLXResult += '</br>';
             replace_sendBLXResult += '<a class="button button__primary" onclick="window.print()">Save/Print Transaction</a>';
             replace_sendBLXResult += '</div>';
-
-          // Display results
           document.getElementById("sendBLXResult").innerHTML = replace_sendBLXResult;
-
         }, "json");
-
-    } // End of else
-  }
+    }}
 </script>
-
 <script >
-
-// QR Code Scanning
 function docReady(fn) {
-    // see if DOM is already available
     if (document.readyState === "complete" || document.readyState === "interactive") {
-        // call on next available tick
         setTimeout(fn, 1);
       } else {
         document.addEventListener("DOMContentLoaded", fn);
-      }
-    } 
-
+      }} 
     docReady(function() {
       var lastResult, countResults = 0;
-
       var html5QrcodeScanner = new Html5QrcodeScanner(
         "reader", { fps: 10, qrbox: 250 });
-
       function onScanSuccess(decodedText, decodedResult) {
         if (decodedText !== lastResult) {
           ++countResults;
           lastResult = decodedText;
-          console.log(`Scan result = ${decodedText}`);
-
           document.getElementById('destinationAddress').value = decodedText;
-
-            // Optional: To close the QR code scannign after the result is found
             html5QrcodeScanner.clear();
-          }
-        }
-
-    // Optional callback for error, can be ignored.
+          }}
     function onScanError(qrCodeError) {
-        // This callback would be called in case of qr code scan error or setup error.
-        // You can avoid this callback completely, as it can be very verbose in nature.
       }
-
       html5QrcodeScanner.render(onScanSuccess, onScanError);
     });
-
-// End Qr Code Scanning
-
 </script>
-
 <style>
 @media (max-device-width: 800px) {
 	.auth {
 		padding-top: 25px;
-	}
-}
-
+	}}
 input[type=text] {
 	display: inline-block;
 }
-
 button, .qr {
 	color: #6495ed;
 	border-color: #6495ed;
 }
-
 .modal {
   position: fixed;
   left: 0;
@@ -188,12 +125,9 @@ button, .qr {
   transform: scale(1.0);
   transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }
-
 </style>
-
 </head>
 <body>
-	<!-- Authentication pages -->
 	<div class="auth">
 		<div class="container">
 			<div class="auth__inner">
@@ -230,15 +164,11 @@ button, .qr {
     </div>
   </div>
 </div>
-
 <script src='js/app.min.js'></script>
-
-<!-- added in -->
-<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/jquery.min.js"></script>
 <script src="js/html5-qrcode.min.js"></script>
 <script src="js/freemarket_scripts.min.js"></script>
 <script src="js/constants.js"></script>
 <script src="js/modal.js"></script>
-
 </body>
 </html>

@@ -5,124 +5,24 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<meta name="description" content="Blue0x Lite Wallet">
 	<link rel="shortcut icon" href="images/favicon.ico">
-
 	<title>Blue0x | LITE</title>
-
 	<link rel='stylesheet' href='css/style.min.css' />
-
 <script>
 	function displayAccountInfo() {
-    	//Get the account numbers
-    	var currentRSAccountNumber = sessionStorage.getItem("RSaccountNumber");
-    	document.getElementById("text").innerHTML = currentRSAccountNumber;
+    	document.getElementById("text").innerHTML = sessionStorage.getItem("accountRS");
     };
 </script>
-
 <script>
 	function createQR() {
 		new QRCode(document.getElementById("qrcode"), {
-		text: sessionStorage.getItem("RSaccountNumber")
-		})
-	};
+		text: sessionStorage.getItem("accountRS")
+		})};
 </script>
-
-<script>
-function goBack() {
-  window.history.back();
-}
-</script>
-
-<script>
-  function showAccountInfo() {
-    // Get the account number
-    var Account = sessionStorage.getItem("RSaccountNumber");
-
-      $.post(Constants.nxtpassApiUrl, {
-        requestType: 'accountInfo',
-        account: Account
-      },
-
-      function(result) {
-
-          if (result.query_status == 'empty_account') { // If this is not a valid account number
-            document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p>This is not a valid BLX account.</p>";
-            } else {
-            // Store the new account balance
-            sessionStorage.setItem("accountBalance", result.effectiveBalanceNXT);
-            console.log('BLX Balance is ' + result.effectiveBalanceNXT)
-
-
-            // Display the logged in account number and balance and remove the Log In button
-            var replace_loginResult = '';
-
-            replace_loginResult += '<div class="auth_auth">';
-            replace_loginResult += '<h3>Your current account balances</h3>';
-            replace_loginResult += '<h4>Account ID</h4>';
-            replace_loginResult += '<p>' + result.RSaccountNumber + '</p>';
-            replace_loginResult += '</div>';
-            replace_loginResult += '<div class="container">';
-            replace_loginResult += '<h4>BLX Balance</h4>';
-            replace_loginResult += '<p>' + result.effectiveBalanceNXT + ' BLX </p>';
-            replace_loginResult += '</div>';
-
-            document.getElementById("loginResult").innerHTML = replace_loginResult;
-          }
-        }, "json"); // Specifies JSON as the expected result
-
-      // Get USDX balance for this account and display it
-
-      $.post(Constants.nxtpassApiUrl, {
-        requestType: 'callNxt',
-        requestTypeNxt: 'getAccountCurrencies',
-        account: Account,
-        currency: Constants.USDXId
-      },
-
-      function(coinoquery) {
-        console.log(coinoquery)
-        if (Object.keys(coinoquery.result).length == 0) {
-            // If this account does not have any USDX
-            console.log('There is no USDX associated with this account.');
-
-            // Display the USDX balance as zero
-            var replace_USDXAccountBalance = '';
-            replace_USDXAccountBalance += '<div class="container">';
-            replace_USDXAccountBalance += '<h4>USDX Balance</h4>';
-            replace_USDXAccountBalance += '<p>0 USDX</p>';
-            replace_USDXAccountBalance += '</div>';
-            replace_USDXAccountBalance += '<a class="button button__primary" href="receive.html">Go Back</a>';
-
-            document.getElementById("USDXAccountBalance").innerHTML = replace_USDXAccountBalance;
-          } else {
-            console.log("USDX Balance is " + coinoquery.result.units);
-            var USDXAccountBalance = coinoquery.result.units;
-            sessionStorage.setItem("USDXAccountBalance", coinoquery.result.units);
-
-            // Convert it to decimal notation
-            var convertedUSDXAccountBalance = USDXAccountBalance / 100;
-
-            // Display the USDX balance
-            var replace_USDXAccountBalance = '';
-            replace_USDXAccountBalance += '<div class="container">';
-            replace_USDXAccountBalance += '<h4>USDX Balance</h4>';
-            replace_USDXAccountBalance += '<p>' + convertedUSDXAccountBalance + ' USDX</p>';
-            replace_USDXAccountBalance += '</div>';
-            replace_USDXAccountBalance += '<a class="button button__primary" href="receive.html">Go Back</a>';
-
-
-            document.getElementById("USDXAccountBalance").innerHTML = replace_USDXAccountBalance;
-
-          }
-        }, "json"); // Specifies JSON as the expected result
-  };
-</script>
-
 <style>
 @media (max-device-width: 994px) {
   h3 {
    display: none;
-  }
-}
+  }}
 .qrcode {
 	display: inline-block;
 }
@@ -132,10 +32,8 @@ h4 {
   line-height: .5em;
 }
 </style>
-
 </head>
 <body onload="createQR(); displayAccountInfo();">
-	<!-- Authentication pages -->
 	<div class="auth">
 		<div class="container">
 			<div class="auth__inner">
@@ -143,27 +41,16 @@ h4 {
 					<img src="./images/scan.svg">
 				</div>
 				<div class="auth__auth">
-					<div id="loginResult">
 					<h1 class="auth__title">Your address QR code</h1>
 					<h4 id="text"></h4>
 					</br>
 					<div id="qrcode" class="qrcode"></div>
-					</br>
-					</br>
-					<button class="button button__primary" type="submit" onclick="showAccountInfo();">View Balances</button>
 				</div>
-				<div id="USDXAccountBalance"></div>
 			</div>
 		</div>
 	</div>
-
 	<script src='js/app.min.js'></script>
-
-	<!-- js added in -->
-	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/jquery.min.js"></script>
 	<script src="js/qrcode.min.js" defer></script>
-	<script src="js/constants.js"></script>
-
-
 </body>
 </html>
