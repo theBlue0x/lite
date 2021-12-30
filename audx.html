@@ -25,22 +25,22 @@
       document.getElementById("amountErrorMessage").innerHTML = "";
       document.getElementById("destinationAddressErrorMessage").innerHTML = "";
       document.getElementById("secretPhraseErrorMessage").innerHTML = "<p>Your secret phrase is required.</p>";
-    } else {
+    } else {  
       var recipient = document.getElementById("destinationAddress").value;
-      var amount = document.getElementById("amount").value * 100000000;
+      var amount = document.getElementById("amount").value;
       var secretPhrase = document.getElementById("secretPhrase").value;
       document.getElementById("callBLXButtonSection").innerHTML = "<button class=\"button button__primary\"><i class=\"fa fa-refresh fa-spin\">&nbsp;Processing</i></button>";
       $.post(Constants.apiUrl, {
-      	requestType: 'sendMoney',        
+      	requestType: 'transferCurrency',        
       	recipient: recipient,
-      	amountNQT: amount,
+        currency: Constants.AUDXId,
+      	units: amount,
       	secretPhrase: secretPhrase,
-      	feeNQT: 100000000,
+      	feeNQT: 1000000,
       	deadline: 60
       },
       function(response) {
-      	console.log(response);
-      	var transactionNumber = response['result'].transaction;
+      	var transactionNumber = JSON.parse(response.transaction);
           document.getElementById("amount").value = "";
           document.getElementById("destinationAddress").value = "";
           document.getElementById("secretPhrase").value = "";
@@ -140,7 +140,7 @@ h1{
 				</div>
 				<div class="auth__auth">
           <div id="sendBLXResult">
-					<h1 class="auth__title">Send BLX</h1>
+					<h1 class="auth__title">Send AUDX</h1>
 					<p>Please complete the following fields</p>
 					<form>
 						<button type="button" class="trigger">
@@ -148,13 +148,13 @@ h1{
 						</button>
 						<input id="destinationAddress" type="text" placeholder="BLX Address of Recipient">
 						<div id="destinationAddressErrorMessage"></div>
-						<input id="amount" type="text" placeholder="Amount of BLX to Send">
+						<input id="amount" type="text" placeholder="Amount of AUDX to Send">
 						<div id="amountErrorMessage"></div>
 						<input id="secretPhrase" type="password" placeholder="Your Account Secret Phrase">
 						<div id="secretPhraseErrorMessage"></div>
 					</form>
 					<div id="callBLXButtonSection">
-            <button type="submit" id="callBLXButton" class="button button__primary" onclick="callBLX();">Send BLX</button>
+            <button type="submit" id="callBLXButton" class="button button__primary" onclick="callBLX();">Send AUDX</button>
           </div>
           <!-- modal start -->
           <div class="modal" id="qrreader">

@@ -13,7 +13,6 @@
     if (!Account) { 
       document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p>Account Number Required</p>";
     } else {
-      var currentRSAccountNumber =$('#user_entered_account_number').val();
       $.post(Constants.apiUrl, {
         requestType: 'getAccount',
         account: $('#user_entered_account_number').val(),
@@ -23,53 +22,70 @@
           if (result.errorDescription == 'Unknown account') { // If this is not a valid account number
             document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p class=\"validation_message\">New or invalid BLX account.  New BLX accounts must first make an outgoing transaction from the Blue0x wallet.</p>";
             } else {
-            var balance = result.balanceNQT / 100000000;
+            var available = result.balanceNQT / 100000000;
             sessionStorage.setItem("accountRS", result.accountRS);
-            sessionStorage.setItem("accountBalance", balance);
             var replace_loginResult = '';
-            replace_loginResult += '<div class="auth_auth">';
-            replace_loginResult += '<h3>You are logged in with the following account</h3>';
-            replace_loginResult += '</br>';
             replace_loginResult += '<h4>Account ID</h4>';
             replace_loginResult += '<p>' + result.accountRS + '</p>';
-            replace_loginResult += '</div>';
-            replace_loginResult += '<div class="container">';
             replace_loginResult += '<h4>BLX Balance</h4>';
-            replace_loginResult += '<p>' + balance + ' BLX </p>';
-            replace_loginResult += '</div>';
+            replace_loginResult += '<p>' + available.toLocaleString() + ' BLX</p>'; 
             document.getElementById("loginResult").innerHTML = replace_loginResult;
           }}, "json");
-      $.post(Constants.apiUrl, {
-        requestType: 'getAccountCurrencies',
-        account: currentRSAccountNumber,
-        currency: Constants.USDXId
-      },
-      function(coinoquery) {
-        if (coinoquery.length == 0) {
-            var replace_USDXAccountBalance = '';
-            replace_USDXAccountBalance += '<div class="container">';
-            replace_USDXAccountBalance += '<h4>USDX Balance</h4>';
-            replace_USDXAccountBalance += '<p>0 USDX</p>';
-            replace_USDXAccountBalance += '</div>';
-            replace_USDXAccountBalance += '</br>';
-            replace_USDXAccountBalance += '<a class="button button__primary" href="currency_select.html" role="button">&nbsp;&ensp;Send&nbsp;&ensp;</a>&nbsp;&nbsp;<a class="button button__primary" href="receive.html" role="button">Receive</a>';
-            document.getElementById("USDXAccountBalance").innerHTML = replace_USDXAccountBalance;
-          } else {
-            var USDXAccountBalance = coinoquery.units;
-            sessionStorage.setItem("USDXAccountBalance", coinoquery.units);
-            var convertedUSDXAccountBalance = USDXAccountBalance / 100;
-            var replace_USDXAccountBalance = '';
-            replace_USDXAccountBalance += '<div class="container">';
-            replace_USDXAccountBalance += '<h4>USDX Balance</h4>';
-            replace_USDXAccountBalance += '<p>' + convertedUSDXAccountBalance + ' USDX</p>';
-            replace_USDXAccountBalance += '</div>';
-            replace_USDXAccountBalance += '</br>';
-            replace_USDXAccountBalance += '<a class="button button__primary" href="currency_select.html" role="button">&nbsp;&ensp;Send&nbsp;&ensp;</a>&nbsp;&nbsp;<a class="button button__primary" href="receive.html" role="button">Receive</a>';
-            document.getElementById("USDXAccountBalance").innerHTML = replace_USDXAccountBalance;
-          }
-        }, "json");
-    }};
-</script>
+    $.getJSON(Constants.apiUrl, {
+      requestType: 'getAccountCurrencies',
+      account: $('#user_entered_account_number').val()
+    }, function(coinquery) {
+      var rows = ' ';
+      for (var i = 0; i < coinquery.accountCurrencies.length; i++) {
+        var available = (coinquery.accountCurrencies[i].unconfirmedUnits) / 100;
+        var currencyCode = coinquery.accountCurrencies[i].currency;
+        let currency;
+        switch(currencyCode){
+          case Constants.USDXId:
+          currency = "USDX";
+          break;
+          case Constants.AUDXId:
+          currency = "AUDX";
+          break;
+          case Constants.CADXId:
+          currency = "CADX";
+          break;
+          case Constants.CHFXId:
+          currency = "CHFX";
+          break;
+          case Constants.CNYXId:
+          currency = "CNYX";
+          break;
+          case Constants.EURXId:
+          currency = "EURX";
+          break;
+          case Constants.GBPXId:
+          currency = "GBPX";
+          break;
+          case Constants.IQDXId:
+          currency = "IQDX";
+          break;
+          case Constants.IRRXId:
+          currency = "IRRX";
+          break;
+          case Constants.JPYXId:
+          currency = "JPYX";
+          break;
+          case Constants.NZDXId:
+          currency = "NZDX";
+          break;
+          case Constants.RUBXId:
+          currency = "RUBX";
+          break;
+        }
+          rows += '<h4>' + currency + ' Balance</h4>';
+          rows += '<p>' + Number(available).toLocaleString() + ' ' + currency + '</p>'; 
+       $("#balances").html(rows); 
+        var buttons = ' ';
+        buttons += '<a class="button button__primary" href="currency_select.html" role="button">&nbsp;&ensp;Send&nbsp;&ensp;</a>&nbsp;&nbsp;<a class="button button__primary" href="receive.html" role="button">Receive</a>';
+          $("#buttons").html(buttons);
+      }})}};
+  </script>
 <style>
 @media (max-device-width: 994px) {
   h3 {
@@ -83,6 +99,15 @@ h4 {
   color: cornflowerblue;
   margin: 10px;
   line-height: .5em;
+}
+.auth__auth {
+  max-height: 350px;
+  overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.auth__auth::-webkit-scrollbar {
+   display: none;
 }
 </style>
 </head>
@@ -103,7 +128,8 @@ h4 {
 						<div id="user_entered_account_numberErrorMessage"></div>
 						<button class="button button__primary" type="submit" onclick="login();">Log In</button>
 					</div>
-					<div id="USDXAccountBalance"></div>
+					<div id="balances"></div>
+          <div id="buttons"></div>
 				</div>
 			</div>
 		</div>
