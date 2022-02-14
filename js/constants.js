@@ -24,7 +24,7 @@ var Constants = (function(Constants, $, undefined) {
 
   Constants.RUBXId = '12430766146857977959';
 
-  Constants.apiUrl = 'https://wallet.blue0x.com/nxt';
+  Constants.apiUrl = 'https://api.blue0x.com/nxt';
 
   return Constants;
 
